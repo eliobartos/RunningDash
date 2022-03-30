@@ -1,5 +1,7 @@
 library(shiny)
 library(shinydashboard)
+library(shinyWidgets)
+library(shinyTime)
 
 library(plotly)
 library(lubridate)
@@ -9,7 +11,9 @@ library(magrittr)
 source("sql_connector.R")
 source("helper_functions.R")
 
-
+onStop(function() {
+  dbDisconnect(db)
+})
 
 ui = dashboardPage(skin = "blue",
   dashboardHeader(title = "RunDash"),
@@ -57,6 +61,7 @@ ui = dashboardPage(skin = "blue",
         )
       ),
       tabItem(tabName = "individual",
+        uiOutput("runner_filter"),
         h2("Runs over time"),
         br(),
         br(),
@@ -80,12 +85,30 @@ ui = dashboardPage(skin = "blue",
             title = "Pace vs Run",
             status = "primary",
             solidHeader = TRUE,
-            plotlyOutput("distance_vs_run")  
+            plotlyOutput("pace_vs_run")  
           )
         )
         
       ),
-      tabItem(tabName = "input")
+      tabItem(tabName = "input",
+          h2("You ran??? Good job, let me know all about it!"),
+          br(),
+          br(),
+          br(),
+          br(),
+          box(
+            title = "Enter a new run",
+            status = "primary",
+            solidHeader = TRUE,
+            
+            textInput('runner_name', label = 'Name:', placeholder = 'Runner X'),
+            airDatepickerInput("run_date", label = "Date:", value = today(), maxDate = today(), autoClose = TRUE),
+            numericInput('run_distance', label = 'Distance:', value = 3, min = 0, max = 50),
+            timeInput('run_time', label = "Run Time: "),
+            passwordInput("password", "Enter Password: "),
+            actionButton("add_run", "Add Run!")
+          )
+      )
     )
   )
 )
@@ -113,6 +136,14 @@ server = function(input, output) {
 
   })
 
+  output$runner_filter = renderUI({
+    runners =  data()$runner %>% unique()
+    selectInput("runner_filter", 
+        label = "Runner:",
+        choices = runners, 
+        selected = runners[1] )
+  })
+  
 # Top Runners -------------------------------------------------------------
   output$first_runner = renderValueBox({
     valueBox("Anci", "1st - 30 km", icon = icon("trophy"), color = "orange")
