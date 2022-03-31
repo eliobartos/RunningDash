@@ -1,30 +1,4 @@
-# Converts pace from minutes to pretty format mm:ss
-minutes_to_ms = function(x) {
-  paste0(floor(x), ':', round((x-floor(x)) * 60))
-}
-
-
-
-validate_data = function(runner_name, run_date, run_distance, run_time, first_run, password) {
-  print(runner_name)
-  typeof(runner_name) %>% print()
-
-  print(run_date)
-  typeof(run_date) %>% print()
-
-  print(run_distance)
-  typeof(run_distance) %>% print()
-
-  print(run_time)
-  typeof(run_time) %>% print()
-  print(format(run_time, format = '%H:%M:%S') )
-  typeof(format(run_time, format = '%H:%M:%S')) %>% print()
-
-  print(first_run)
-  typeof(first_run) %>% print()
-
-  print(password)
-  typeof(password) %>% print()
+validate_data = function(data_all, runner_name, run_date, run_distance, run_time, first_run, password) {
   
   runners = unique(data_all$runner)
   run_time = format(run_time, format = '%H:%M:%S')
@@ -43,13 +17,13 @@ validate_data = function(runner_name, run_date, run_distance, run_time, first_ru
   } else if(run_time_s < 60) {
     notif_text = paste0("You ran less than a minute... That is not a run.")
   } else if(first_run == TRUE && runner_name %in% runners) {
-      notif_text = "Runner name already taken!"
+    notif_text = "Runner name already taken!"
   } else if(first_run == FALSE && !(runner_name %in% runners)) {
-      notif_text  = "Wrong runner name! If you are a new runner click on the checkbox, if not check entered runner name for mistakes."   
+    notif_text  = "Wrong runner name! If you are a new runner click on the checkbox, if not check entered runner name for mistakes."   
   } else if (pace < 3) {
-      notif_text = "Your pace seems suspiciously fast, not allowing it!"
+    notif_text = "Your pace seems suspiciously fast, not allowing it!"
   } else if (pace > 13) {
-      notif_text = "Your pace seems too slow. Did you run at all? Walking only does not count!"
+    notif_text = "Your pace seems too slow. Did you run at all? Walking only does not count!"
   } else {
     notif_text = success_text
   }
