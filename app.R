@@ -34,14 +34,12 @@ ui = dashboardPage(skin = "blue",
       tabItem(tabName = "overall",
         h2("Top Runners"),
         br(),
-        br(),
         fluidRow(
           valueBoxOutput("first_runner"),
           valueBoxOutput("second_runner"),
           valueBoxOutput("third_runner")
         ),
         h2("Runs"),
-        br(),
         br(),
         fluidRow(
           box(
@@ -63,7 +61,6 @@ ui = dashboardPage(skin = "blue",
       tabItem(tabName = "individual",
         uiOutput("runner_filter"),
         h2("Runs over time"),
-        br(),
         br(),
         fluidRow(
           box(
@@ -91,20 +88,18 @@ ui = dashboardPage(skin = "blue",
         
       ),
       tabItem(tabName = "input",
-          h2("You ran??? Good job, let me know all about it!"),
-          br(),
-          br(),
-          br(),
+          h2("Let me know about your run:"),
           br(),
           box(
-            title = "Enter a new run",
+            title = "Enter a new run:",
             status = "primary",
             solidHeader = TRUE,
-            
+            width = 4,
             textInput('runner_name', label = 'Name:', placeholder = 'Runner X'),
             airDatepickerInput("run_date", label = "Date:", value = today(), maxDate = today(), autoClose = TRUE),
-            numericInput('run_distance', label = 'Distance:', value = 3, min = 0, max = 50),
-            timeInput('run_time', label = "Run Time: "),
+            numericInput('run_distance', label = 'Distance (km):', value = 0.0, min = 0, max = 50),
+            timeInput('run_time', label = "Run Time (hh:mm:ss): "),
+            checkboxInput('first_run', 'First run?'),
             passwordInput("password", "Enter Password: "),
             actionButton("add_run", "Add Run!")
           )
@@ -186,6 +181,21 @@ server = function(input, output) {
         xaxis = list(rangemode = "tozero", zeroline = FALSE), 
         yaxis = list(rangemode = "tozero", zeroline = FALSE))
   })
+  
+
+# Input -------------------------------------------------------------------
+
+  observeEvent(input$add_run, {
+    validate_data(
+      input$runner_name,
+      input$run_date,
+      input$run_distance,
+      input$run_time,
+      input$first_run,
+      input$password
+    )
+  })
+    
 }
 
 shinyApp(ui = ui, server = server)
