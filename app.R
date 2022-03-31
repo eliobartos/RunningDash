@@ -14,7 +14,7 @@ library(magrittr)
 source(".sql_connector.R")
 
 # Source UI
-source('ui/base.R')
+source('ui/ui_base.R')
 
 # Source server side functions
 source("server/server.R")

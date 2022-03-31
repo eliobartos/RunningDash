@@ -1,7 +1,7 @@
-source('ui/overall.R')
-source('ui/individual.R')
-source('ui/input.R')
-source('ui/sidebar.R')
+source('ui/ui_overall.R')
+source('ui/ui_individual.R')
+source('ui/ui_input.R')
+source('ui/ui_sidebar.R')
 
 ui = dashboardPage(skin = "blue",
    dashboardHeader(title = "RunDash"),
