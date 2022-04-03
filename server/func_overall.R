@@ -1,3 +1,5 @@
+
+# Graphs ------------------------------------------------------------------
 graph_pace_vs_distance = function(data) {
   
   plot_ly(data = data, x = ~distance, y = ~pace, color =~runner,
@@ -27,4 +29,24 @@ graph_avg_pace = function(data) {
       xaxis = list(rangemode = "tozero", zeroline = FALSE), 
       yaxis = list(rangemode = "tozero", zeroline = FALSE)
     )
+}
+
+
+# Tables ------------------------------------------------------------------
+overall_table = function(data) {
+   out = data %>% 
+    group_by(runner) %>% 
+    summarise(
+      total_runs = n(),
+      total_distance = sum(distance) %>% round(2),
+      total_running_time = sum(time_s) %>% seconds_to_hms(),
+      avg_distance = mean(distance) %>% round(2),
+      avg_running_time = mean(time_s) %>% seconds_to_hms(),
+      avg_pace = (sum(time_s)/sum(distance)) %>% seconds_to_hms()
+    ) %>% 
+     arrange(desc(total_distance))
+   
+   colnames(out) = c("Runner", "Runs", "Distance (km)", "Running Time", "Avg. Distance (km)", "Avg. Running Time", "Avg. Pace")
+
+   return(out %>% formattable())   
 }
