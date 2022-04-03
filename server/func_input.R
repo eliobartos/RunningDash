@@ -1,4 +1,4 @@
-validate_data = function(data_all, runner_name, run_date, run_distance, run_time, first_run, password) {
+validate_data = function(data_all, runner_name, run_date, run_distance, run_time, first_run) {
   
   runners = unique(data_all$runner)
   run_time = format(run_time, format = '%H:%M:%S')
@@ -32,8 +32,25 @@ validate_data = function(data_all, runner_name, run_date, run_distance, run_time
     showNotification(notif_text, type = "error", duration = 10)
   }  else {
     showNotification("Adding run, please wait...")
-    # Code to add it to db
     
-    showNotification(notif_text, duration = 10, action = a(href = "javascript:location.reload();", "Reload page"))
+    new_data = data.frame(
+      date = run_date,
+      runner = runner_name,
+      distance = run_distance,
+      time = run_time
+    )
+    
+    success = dbWriteTable(db, "runs", new_data, append = TRUE, row.names = FALSE)
+    
+    if(success == FALSE) {
+       notif_text = "Something went wrong. I'm sorry. Please try again."
+    }
+    
+    showNotification(notif_text, duration = 10, action = a(href = "javascript:location.reload();", "Reload page"))  
+    
   }
+  
+  
+  
+  
 }

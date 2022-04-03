@@ -9,6 +9,7 @@ library(plotly)
 library(lubridate)
 library(dplyr)
 library(magrittr)
+library(dbplyr)
 
 # Connect to DB
 source(".sql_connector.R")

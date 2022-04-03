@@ -42,8 +42,7 @@ server = function(input, output) {
       input$run_date,
       input$run_distance,
       input$run_time,
-      input$first_run,
-      input$password
+      input$first_run
     )
   })
   

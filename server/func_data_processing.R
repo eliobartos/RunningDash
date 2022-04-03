@@ -1,7 +1,7 @@
 
 # Returns runs table from DB
 read_and_process_data = function() {
-  data_all = dbGetQuery(db, "select * from runs") %>% 
+  data_all = tbl(db, 'runs') %>% 
     as.data.frame()
   
   data_all = data_all %>% 

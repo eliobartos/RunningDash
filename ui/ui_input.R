@@ -13,7 +13,6 @@ tab_input = tabItem(
       numericInput('run_distance', label = 'Distance (km):', value = 0.0, min = 0, max = 50),
       timeInput('run_time', label = "Run Time (hh:mm:ss): "),
       checkboxInput('first_run', 'First run?'),
-      passwordInput("password", "Enter Password: "),
       actionButton("add_run", "Add Run!")
     )
 )
