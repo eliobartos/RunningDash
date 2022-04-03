@@ -18,8 +18,8 @@ server = function(input, output) {
     filter_data(data_all,  input$date_filter, input$runner_filter)
   })
 
+  # Overall Tab ----------------------------------------------------------
 
-  # Top Runners -------------------------------------------------------------
   output$first_runner = renderValueBox({
     valueBox("Anci", "1st - 30 km", icon = icon("trophy"), color = "orange")
   })
@@ -32,11 +32,11 @@ server = function(input, output) {
     valueBox("Hop", "3rd - 13 km", icon = icon("listfaet"), color = "navy")
   })
 
-
-  # Overall Graphs ----------------------------------------------------------
   output$pace_vs_distance = renderPlotly({ graph_pace_vs_distance(data()) })
 
   output$avg_pace = renderPlotly({ graph_avg_pace(data()) })
+  
+  output$overall_table = renderFormattable({ overall_table(data()) })
 
   # Individual Graphs ----------------------------------------------------------
   output$distance_vs_run = renderPlotly({ graph_distance_vs_run(data_runner()) })
@@ -44,6 +44,7 @@ server = function(input, output) {
   output$pace_vs_run = renderPlotly({ graph_pace_vs_run(data_runner()) })
 
   output$distance_vs_date = renderPlotly({ graph_distance_vs_date(data_runner()) })
+ 
 
   # Input -------------------------------------------------------------------
 
