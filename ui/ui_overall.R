@@ -23,5 +23,14 @@ tab_overall = tabItem(
         solidHeader = TRUE,
         plotlyOutput("avg_pace")
       )
+    ),
+    br(),
+    fluidRow(
+      box(
+        title = "Totals",
+        status = "primary",
+        solidHeader = TRUE,
+        formattableOutput("overall_table")
+      )
     )
 )

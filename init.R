@@ -13,7 +13,8 @@ packages = c(
     "plotly",
     "lubridate",
     "dplyr",
-    "magrittr"
+    "magrittr",
+    "formattable"
     )
 
 install_if_missing = function(p) {
