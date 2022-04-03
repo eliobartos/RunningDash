@@ -1,15 +1,5 @@
-# Shiny Related Packages
-library(shiny)
-library(shinydashboard)
-library(shinyWidgets)
-library(shinyTime)
-
-# Other Packages
-library(plotly)
-library(lubridate)
-library(dplyr)
-library(magrittr)
-library(dbplyr)
+# Install and load packages
+source("init.R")
 
 # Connect to DB
 source(".sql_connector.R")
