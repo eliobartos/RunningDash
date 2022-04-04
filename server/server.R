@@ -35,16 +35,36 @@ server = function(input, output) {
   output$pace_vs_distance = renderPlotly({ graph_pace_vs_distance(data()) })
 
   output$avg_pace = renderPlotly({ graph_avg_pace(data()) })
-  
+
   output$overall_table = renderFormattable({ overall_table(data()) })
 
   # Individual Graphs ----------------------------------------------------------
+  boxes = reactive({
+    individual_boxes(data_runner())
+    })
+
+  output$total_runs_ind = renderValueBox({
+    valueBox(boxes()["total_runs"], "Total runs", icon = icon("hashtag"), color = "orange")
+  })
+
+  output$total_distance_ind = renderValueBox({
+    valueBox(boxes()["total_distance"], "Total distance", icon = icon("play"), color = "green")
+  })
+
+  output$total_time_ind = renderValueBox({
+    valueBox(boxes()["total_time"], "Total running time", icon = icon("clock"), color = "yellow")
+  })
+
+  output$avg_pace_ind = renderValueBox({
+    valueBox(boxes()["avg_pace"], "Average pace", icon = icon("redo"), color = "blue")
+  })
+
   output$distance_vs_run = renderPlotly({ graph_distance_vs_run(data_runner()) })
 
   output$pace_vs_run = renderPlotly({ graph_pace_vs_run(data_runner()) })
 
   output$distance_vs_date = renderPlotly({ graph_distance_vs_date(data_runner()) })
- 
+
 
   # Input -------------------------------------------------------------------
 
