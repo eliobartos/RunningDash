@@ -50,3 +50,38 @@ overall_table = function(data) {
 
    return(out %>% formattable())   
 }
+
+
+# Tables ------------------------------------------------------------------
+
+get_top_runners = function(data) {
+  
+  tmp = data %>% 
+    group_by(runner) %>% 
+    summarise(
+      total_distance = sum(distance) %>% round(2)
+    ) %>% 
+    arrange(desc(total_distance))
+  
+  tmp$final_string = ""
+  
+  if(nrow(tmp) >= 1) {
+    tmp$final_string[1] = paste0("1st - ", tmp$total_distance[1], " km")
+  }
+  
+  if(nrow(tmp) >= 2) {
+    tmp$final_string[2] = paste0("2nd - ", tmp$total_distance[2], " km")
+  }
+  
+  if(nrow(tmp) >= 3) {
+    tmp$final_string[3] = paste0("3rd - ", tmp$total_distance[3], " km")
+  }
+  
+  while(nrow(tmp) < 3) {
+    empty_row = data.frame(runner = "Could be you!", total_distance = 0, final_string = "3rd - 0 km")
+    tmp = bind_rows(tmp, empty_row)
+  }
+  
+  return(tmp)
+  
+}
