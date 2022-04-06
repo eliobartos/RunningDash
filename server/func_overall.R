@@ -25,8 +25,11 @@ graph_pace_vs_distance = function(data) {
     labs(color = "Runner") +
     theme_minimal() 
   
-  fig = plotly_build(p)
+  p2 <- ggplotly(p)
   
+  p2 <- p2 %>% layout(hoverlabel = list(align = "left"))
+  
+  fig = plotly_build(p2)
   
   for(i in 1:length(unique(data$runner))) {
     tmp = data %>% filter(runner == fig$x$data[[i]]$name)

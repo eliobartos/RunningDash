@@ -37,5 +37,5 @@ individual_boxes = function(data_runner) {
     total_runs = total_runs %>% as.character() ,
     total_distance = total_distance %>% as.character(),
     total_time = total_time %>% seconds_to_hms(),
-    avg_pace = round(avg_pace,2) %>% as.character()))
+    avg_pace = avg_pace %>% seconds_to_hms()))
 }
