@@ -7,8 +7,9 @@ read_and_process_data = function() {
   data_all = data_all %>%
     mutate(
       time_s = as.numeric(hms(time)),
+      pace_s = time_s/distance,
       pace = time_s/distance/60,
-      pace_pretty = minutes_to_ms(pace)
+      pace_pretty = seconds_to_hms(pace_s)
     )
 
   return(data_all)
