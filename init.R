@@ -1,27 +1,42 @@
-packages = c(
-    # Shiny Related Packages
-    "shiny",
-    "shinydashboard",
-    "shinyWidgets",
-    "shinyTime",
+library(shiny)
+library(shinydashboard)
+library(shinyWidgets)
+library(shinyTime)
 
-    # DB Related Packages
-    "DBI",
-    "RPostgreSQL",
+library(DBI)
+library(RPostgreSQL)
+library(dbplyr)
 
-    # Other Packages
-    "plotly",
-    "lubridate",
-    "dplyr",
-    "magrittr",
-    "formattable"
-    )
+library(plotly)
+library(lubridate)
+library(dplyr)
+library(magrittr)
+library(formattable)
 
-install_if_missing = function(p) {
-  if (p %in% rownames(installed.packages()) == FALSE) {
-    install.packages(p)
-  }
-}
-
-invisible(sapply(packages, install_if_missing))
-invisible(lapply(packages, library, character.only = TRUE))
+# packages = c(
+#     # Shiny Related Packages
+#     "shiny",
+#     "shinydashboard",
+#     "shinyWidgets",
+#     "shinyTime",
+# 
+#     # DB Related Packages
+#     "DBI",
+#     "RPostgreSQL",
+# 
+#     # Other Packages
+#     "plotly",
+#     "lubridate",
+#     "dplyr",
+#     "magrittr",
+#     "formattable"
+#     )
+# 
+# install_if_missing = function(p) {
+#   if (p %in% rownames(installed.packages()) == FALSE) {
+#     install.packages(p)
+#   }
+# }
+# 
+# #invisible(sapply(packages, install_if_missing))
+# invisible(lapply(packages, library, character.only = TRUE))
