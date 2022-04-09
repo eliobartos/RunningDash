@@ -23,17 +23,20 @@ server = function(input, output) {
   })
 
   # Overall Tab ----------------------------------------------------------
-
+  boxes_runner = reactive({
+    get_top_runners(data())
+  })
+  
   output$first_runner = renderValueBox({
-    valueBox("Anci", "1st - 30 km", icon = icon("trophy"), color = "orange")
+    valueBox(boxes_runner()$runner[1], boxes_runner()$final_string[1], icon = icon("trophy"), color = "orange")
   })
 
   output$second_runner = renderValueBox({
-    valueBox("Elio", "2nd - 25 km", icon = icon("play"), color = "green")
+    valueBox(boxes_runner()$runner[2], boxes_runner()$final_string[2], icon = icon("play"), color = "green")
   })
 
   output$third_runner = renderValueBox({
-    valueBox("Hop", "3rd - 13 km", icon = icon("listfaet"), color = "navy")
+    valueBox(boxes_runner()$runner[3], boxes_runner()$final_string[3], icon = icon("listfaet"), color = "navy")
   })
 
   output$pace_vs_distance = renderPlotly({ graph_pace_vs_distance(data()) })

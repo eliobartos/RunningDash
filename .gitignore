@@ -1,3 +1,4 @@
 .sql_connector.R
 .DS_Store
 playground.R
+rsconnect/
