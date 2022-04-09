@@ -2,8 +2,14 @@ server = function(input, output) {
 
   data_all = read_and_process_data()
 
+  min_date_all = min(data_all$date)
+
   data = reactive({
     filter_data(data_all, input$date_filter)
+  })
+
+  min_date = reactive({
+    get_min_date(min_date_all, input$date_filter)
   })
 
   output$runner_filter = renderUI({
@@ -11,7 +17,7 @@ server = function(input, output) {
     selectInput("runner_filter",
                 label = "Runner:",
                 choices = runners,
-                selected = runners[1] )
+                selected = runners[1])
   })
 
   data_runner = reactive({
@@ -22,7 +28,7 @@ server = function(input, output) {
   boxes_runner = reactive({
     get_top_runners(data())
   })
-  
+
   output$first_runner = renderValueBox({
     valueBox(boxes_runner()$runner[1], boxes_runner()$final_string[1], icon = icon("trophy"), color = "orange")
   })
@@ -32,7 +38,7 @@ server = function(input, output) {
   })
 
   output$third_runner = renderValueBox({
-    valueBox(boxes_runner()$runner[3], boxes_runner()$final_string[3], icon = icon("listfaet"), color = "navy")
+    valueBox(boxes_runner()$runner[3], boxes_runner()$final_string[3], icon = icon("play"), color = "blue")
   })
 
   output$pace_vs_distance = renderPlotly({ graph_pace_vs_distance(data()) })
@@ -41,32 +47,33 @@ server = function(input, output) {
 
   output$overall_table = renderFormattable({ overall_table(data()) })
 
-  # Individual Graphs ----------------------------------------------------------
+  # Individual Tab ----------------------------------------------------------
+
   boxes = reactive({
-    individual_boxes(data_runner())
+    get_individual_stats(data_runner())
     })
 
   output$total_runs_ind = renderValueBox({
-    valueBox(boxes()["total_runs"], "Total runs", icon = icon("hashtag"), color = "orange")
+    valueBox(boxes()["total_runs"], "Total runs", icon = icon("hashtag"), color = "yellow")
   })
 
   output$total_distance_ind = renderValueBox({
-    valueBox(boxes()["total_distance"], "Total distance", icon = icon("play"), color = "green")
+    valueBox(boxes()["total_distance"], "Total distance", icon = icon("play"), color = "blue")
   })
 
   output$total_time_ind = renderValueBox({
-    valueBox(boxes()["total_time"], "Total running time", icon = icon("clock"), color = "yellow")
+    valueBox(boxes()["total_time"], "Total running time", icon = icon("clock"), color = "green")
   })
 
   output$avg_pace_ind = renderValueBox({
-    valueBox(boxes()["avg_pace"], "Average pace", icon = icon("redo"), color = "blue")
+    valueBox(boxes()["avg_pace"], "Average pace", icon = icon("redo"), color = "orange")
   })
 
-  output$distance_vs_run = renderPlotly({ graph_distance_vs_run(data_runner()) })
+  output$distance_vs_run = renderPlotly({ graph_distance_vs_run(data_runner(), min_date()) })
 
-  output$pace_vs_run = renderPlotly({ graph_pace_vs_run(data_runner()) })
+  output$pace_vs_run = renderPlotly({ graph_pace_vs_run(data_runner(), min_date()) })
 
-  output$distance_vs_date = renderPlotly({ graph_distance_vs_date(data_runner()) })
+  output$distance_vs_date = renderPlotly({ graph_distance_vs_date(data_runner(), min_date()) })
 
 
   # Input -------------------------------------------------------------------
