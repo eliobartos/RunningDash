@@ -20,12 +20,16 @@ read_and_process_data = function() {
 # Returns: All runs data filtered to specific time period
 filter_data = function(data_all, date_filter, runner_filter = NA) {
 
-  if(date_filter == 'Last 30 Days') {
-    data_all = data_all %>% filter(date >= today() - 31)
+  if(!is.null(date_filter)){
+      if(date_filter == 'Last 30 Days') {
+      data_all = data_all %>% filter(date >= today() - 31)
+    }
   }
 
-  if(!is.na(runner_filter)){
-    data_all = data_all %>% filter(runner == runner_filter)
+  if(!is.null(runner_filter)){
+    if(!is.na(runner_filter)){
+      data_all = data_all %>% filter(runner == runner_filter)
+    }
   }
 
   return(data_all)
@@ -33,10 +37,13 @@ filter_data = function(data_all, date_filter, runner_filter = NA) {
 
 # Returns relative min date based on input$date_filter and min date in data_all
 get_min_date = function(min_date_all, date_filter){
-  if(date_filter == 'Last 30 Days'){
-    min_date = max(min_date_all, today() - 31)
-  }else{
-    min_date = min_date_all
+
+  min_date = min_date_all
+
+  if(!is.null(date_filter)){
+    if(date_filter == 'Last 30 Days'){
+      min_date = max(min_date_all, today() - 31)
+    }
   }
 
   return(min_date)
