@@ -2,9 +2,13 @@ server = function(input, output) {
 
   data_all = read_and_process_data()
 
+  min_date_all = min(data_all$date)
+
   data = reactive({
     filter_data(data_all, input$date_filter)
   })
+
+  min_date = get_min_date(min_date_all, input$date_filter)
 
   output$runner_filter = renderUI({
     runners =  data()$runner %>% unique()
@@ -38,7 +42,8 @@ server = function(input, output) {
 
   output$overall_table = renderFormattable({ overall_table(data()) })
 
-  # Individual Graphs ----------------------------------------------------------
+  # Individual Tab ----------------------------------------------------------
+
   boxes = reactive({
     individual_boxes(data_runner())
     })

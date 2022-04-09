@@ -29,3 +29,14 @@ filter_data = function(data_all, date_filter, runner_filter = NA) {
 
   return(data_all)
 }
+
+# Returns relative min date based on input$date_filter and min date in data_all
+get_min_date = function(min_date_all, date_filter){
+  if(date_filter == 'Last 30 Days'){
+    min_date = max(min_date_all, today() - 31)
+  }else{
+    min_date = min_date_all
+  }
+
+  return(min_date)
+}
