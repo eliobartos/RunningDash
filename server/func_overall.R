@@ -54,6 +54,7 @@ graph_avg_pace = function(data) {
     summarise(
       time = sum(time_s),
       runs = n(),
+      avg_distance = mean(distance),
       distance_ = sum(distance),
       avg_pace_s = sum(time_s)/sum(distance),
       avg_pace = sum(time_s)/sum(distance)/60,
@@ -65,7 +66,7 @@ graph_avg_pace = function(data) {
     hover_data[[i]] = paste0(
       "<b>Runner:    </b>", tmp$runner[i], "\n",
       "<b>Runs:        </b>", tmp$runs[i], "\n",
-      "<b>Distance Mean:  </b>", tmp$cluster_center[i] %>% round(2), " km", "\n",
+      "<b>Distance Mean:  </b>", tmp$avg_distance[i] %>% round(2), " km", "\n",
       "<b>Distance Range: </b>", tmp$cluster_label[i], "\n",
       "<b>Avg Pace: </b>", tmp$avg_pace_pretty[i]
     )
@@ -75,14 +76,17 @@ graph_avg_pace = function(data) {
   
   p = tmp %>% 
     ggplot(aes(x = cluster_center, y = avg_pace, color = runner)) +
-    geom_point(alpha = 0.8) +
+    geom_vline(xintercept = unique(tmp$cluster_center), lty = 2, lwd = 0.4, alpha = 0.5, color = "red") +
+    geom_point(alpha = 0.8, size = 2.5, shape = 15) +
     xlab("Distance Group") +
     ylab("Avg. Pace") +
     expand_limits(y = 4, x = 1) +
-    scale_x_continuous(breaks = seq(2, 100, 2)) +
+    scale_x_continuous(breaks = seq(2, 100, 2), minor_breaks = NULL) +
     scale_y_continuous(n.breaks = 6, minor_breaks = NULL) +
     labs(color = "Runner") +
-    theme_minimal() 
+    theme_minimal()
+    
+  p
   
   
   p2 <- ggplotly(p)
@@ -92,8 +96,8 @@ graph_avg_pace = function(data) {
   fig = plotly_build(p2)
   
   for(i in 1:length(unique(tmp$runner))) {
-    tmp2 = tmp %>% filter(runner == fig$x$data[[i]]$name)
-    fig$x$data[[i]]$text = tmp2$hover_data
+    tmp2 = tmp %>% filter(runner == fig$x$data[[i+1]]$name)
+    fig$x$data[[i+1]]$text = tmp2$hover_data
   }
   
   return(fig)
