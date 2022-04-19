@@ -20,8 +20,8 @@ graph_pace_vs_distance = function(data) {
     xlab("Distance (km)") +
     ylab("Pace (min/km)") +
     expand_limits(y = 4, x = 1) +
-    scale_x_continuous(breaks = seq(0, 10), minor_breaks = NULL) +
-    scale_y_continuous(n.breaks = 6, minor_breaks = NULL) +
+    scale_x_continuous(breaks = seq(2, 100, 2)) +
+    scale_y_continuous(n.breaks = 6) +
     labs(color = "Runner") +
     theme_minimal() 
   
@@ -79,7 +79,7 @@ graph_avg_pace = function(data) {
     xlab("Distance Group") +
     ylab("Avg. Pace") +
     expand_limits(y = 4, x = 1) +
-    scale_x_continuous(breaks = seq(0, 10), minor_breaks = NULL) +
+    scale_x_continuous(breaks = seq(2, 100, 2)) +
     scale_y_continuous(n.breaks = 6, minor_breaks = NULL) +
     labs(color = "Runner") +
     theme_minimal() 
