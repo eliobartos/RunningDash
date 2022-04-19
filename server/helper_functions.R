@@ -39,6 +39,61 @@ print.tbl_df = function(...) {
   print.data.frame(...)
 }
 
+# Calculates optimal clustering based on L1 norm + alpha * (k-1)
+# where k is the number of clusters
+# Returns the same input data with additional columns: cluster, cluster_center, cluster_label
+get_smart_clusters = function(data, alpha = 0.5, min_k = 1, max_k = 6) {
+  set.seed(100)
+  res = data.frame()
+  
+  max_k = min(max_k, length(data$distance))
+  
+  # Try each cluster number k and calculate error ------------------------------------------
+  for(k in min_k:max_k) {
+    tmp_data = data
+    fit = amap::Kmeans(data$distance, centers = k, method = "manhattan")
+    tmp_data$cluster = fit$cluster %>% as.character()
+    
+    centers_df = data.frame(cluster = as.character(1:nrow(fit$centers)), centers = fit$centers)
+    tmp_data = merge(tmp_data, centers_df)
+    
+    cluster_error = tmp_data %>% 
+      group_by(cluster) %>% 
+      summarise(
+        error = sum(abs(distance - centers))
+      ) %>% 
+      summarise(
+        cluster_error = sum(error)
+      ) %>% 
+      unlist()
+    
+    names(cluster_error) = NULL
+    
+    alpha_error = alpha  * (k-1)
+    
+    out = data.frame(k = k, cluster_error = cluster_error, alpha_error = alpha_error, total_error = cluster_error + alpha_error)
+    
+    res = bind_rows(res, out)
+  }
+  
+  # Choose the best k and apply it to data ----------------------------------
+  final_k = which.min(res$total_error)
+  
+  fit = kmeans(data$distance, centers = final_k, algorithm = "Lloyd")
+  data$cluster = fit$cluster %>% as.character()
+  
+  centers_df = data.frame(cluster = as.character(1:nrow(fit$centers)), cluster_center = fit$centers)
+  
+  labels_df = data %>% 
+    group_by(cluster) %>% 
+    summarise(
+      cluster_label = paste0("[", round(min(distance), 2), ", ", round(max(distance), 2), "]")
+    )
+  
+  data = merge(centers_df, data) %>% merge(labels_df)
+  return(data)
+}
+
 
 
 

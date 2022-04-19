@@ -47,11 +47,10 @@ graph_pace_vs_distance = function(data) {
 
 graph_avg_pace = function(data) {
   
+  data = get_smart_clusters(data, max_k = 10)
+  
   tmp = data %>% 
-    mutate(
-      distance_group = cut(distance, breaks = c(0, seq(0.5, 100.5, by = 1), Inf), labels = c(0, seq(1, 100, by = 1), 101)) %>% as.character() %>%  as.numeric()
-    ) %>% 
-    group_by(runner, distance_group) %>% 
+    group_by(runner, cluster, cluster_center, cluster_label) %>% 
     summarise(
       time = sum(time_s),
       runs = n(),
@@ -66,7 +65,8 @@ graph_avg_pace = function(data) {
     hover_data[[i]] = paste0(
       "<b>Runner:    </b>", tmp$runner[i], "\n",
       "<b>Runs:        </b>", tmp$runs[i], "\n",
-      "<b>Distance:  </b>", tmp$distance_group[i], " km", "\n",
+      "<b>Distance Mean:  </b>", tmp$cluster_center[i] %>% round(2), " km", "\n",
+      "<b>Distance Range: </b>", tmp$cluster_label[i], "\n",
       "<b>Avg Pace: </b>", tmp$avg_pace_pretty[i]
     )
   }
@@ -74,7 +74,7 @@ graph_avg_pace = function(data) {
   tmp$hover_data = hover_data
   
   p = tmp %>% 
-    ggplot(aes(x = distance_group, y = avg_pace, color = runner)) +
+    ggplot(aes(x = cluster_center, y = avg_pace, color = runner)) +
     geom_point(alpha = 0.8) +
     xlab("Distance Group") +
     ylab("Avg. Pace") +

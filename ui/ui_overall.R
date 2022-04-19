@@ -18,7 +18,7 @@ tab_overall = tabItem(
         plotlyOutput("pace_vs_distance")
       ),
       box(
-        title = "Avg Pace",
+        title = "Smart Avg. Pace",
         status = "primary",
         solidHeader = TRUE,
         plotlyOutput("avg_pace")
